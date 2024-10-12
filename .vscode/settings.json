@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "sdl_mixer.h": "c",
+    "avformat.h": "c",
+    "typeinfo": "c",
+    "string.h": "c"
+  }
+}
