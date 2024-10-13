@@ -20,10 +20,10 @@ typedef struct song_s
 } song_t;
 
 song_t *head = NULL;
-song_t *add_song(song_t *head, const char *name, const int duration);
 char *get_song_duration(const char *filename);
-char *concat_strings(const char *str1, const char *str2);
 int play_playlist(song_t *head, const char *songfolder);
+char *concat_strings(const char *str1, const char *str2);
+song_t *add_song(song_t *head, const char *name, const int duration);
 
 int main(int argc, char *argv[])
 {

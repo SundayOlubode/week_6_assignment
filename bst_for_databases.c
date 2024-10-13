@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int unique_key = 0;
 
@@ -15,10 +17,19 @@ typedef struct product_s
 
 product_t *root = NULL;
 
+void print_product(product_t *product);
+void display_product_asc(product_t *root);
+product_t *search_product_by_name(const char *name);
+void display_out_of_stock_products(product_t *root);
+product_t *update_product_price(const char *name, const int price);
+product_t *update_product_quantity(const char *name, const int quantity);
+product_t *decrement_product_quantity(const char *name, const int quantity);
+product_t *add_product(const char *name, const int price, const int quantity);
+
 int main()
 {
 	int choice;
-	root = add_product("Iyange Apple", 1000, 2);
+	root = add_product("Apple", 1000, 2);
 	add_product("Mineche", 50, 3);
 	add_product("Imizuzu", 150, 2);
 	add_product("Grape", 5000, 1);
@@ -31,6 +42,7 @@ int main()
 		printf("Enter 3 to buy a product.\n");
 		printf("Enter 4 to stock a product.\n");
 		printf("Enter 5 to display all products in ascending order.\n");
+		printf("Enter 6 to exit: ");
 		scanf("%d", &choice);
 
 		switch (choice)
@@ -47,6 +59,7 @@ int main()
 			printf("Enter product quantity: ");
 			scanf("%d", &quantity);
 			add_product(name, price, quantity);
+			printf("Product added succesfully!\n\n");
 			break;
 		}
 		case 2:
@@ -57,10 +70,7 @@ int main()
 			product_t *product = search_product_by_name(name);
 			if (product != NULL)
 			{
-				printf("Product ID: %d\n", product->id);
-				printf("Product Name: %s\n", product->name);
-				printf("Product Price: RFW %d\n", product->price);
-				printf("Product Quantity: %d\n", product->quantity);
+				print_product(product);
 			}
 			else
 			{
@@ -79,10 +89,7 @@ int main()
 			product_t *product = decrement_product_quantity(name, quantity);
 			if (product != NULL)
 			{
-				printf("Product ID: %d\n", product->id);
-				printf("Product Name: %s\n", product->name);
-				printf("Product Price: RFW %d\n", product->price);
-				printf("Product Quantity: %d\n", product->quantity);
+				print_product(product);
 			}
 			else
 			{
@@ -101,10 +108,7 @@ int main()
 			product_t *product = update_product_quantity(name, quantity);
 			if (product != NULL)
 			{
-				printf("Product ID: %d\n", product->id);
-				printf("Product Name: %s\n", product->name);
-				printf("Product Price: RFW %d\n", product->price);
-				printf("Product Quantity: %d\n", product->quantity);
+				print_product(product);
 			}
 			else
 			{
@@ -119,6 +123,11 @@ int main()
 		}
 
 		default:
+			break;
+		}
+
+		if (choice == 6)
+		{
 			break;
 		}
 	}
@@ -192,7 +201,7 @@ product_t *update_product_quantity(const char *name, const int quantity)
 	product_t *product = search_product_by_name(name);
 	if (product != NULL)
 	{
-		product->quantity = quantity;
+		product->quantity += quantity;
 	}
 
 	return product;
@@ -211,7 +220,7 @@ product_t *decrement_product_quantity(const char *name, const int quantity)
 		if (product->quantity < quantity)
 		{
 			printf("Quantity to buy is more than the available quantity.\n");
-			printf("Available quantity: %d\n", product->quantity);
+			printf("Available quantity: %d\n\n", product->quantity);
 			return product;
 		}
 		product->quantity -= quantity;
@@ -236,10 +245,7 @@ void display_product_asc(product_t *root)
 	if (root != NULL)
 	{
 		display_product_asc(root->left);
-		printf("Product ID: %d\n", root->id);
-		printf("Product Name: %s\n", root->name);
-		printf("Product Price: %d\n", root->price);
-		printf("Product Quantity: %d\n", root->quantity);
+		print_product(root);
 		display_product_asc(root->right);
 	}
 }
@@ -251,11 +257,16 @@ void display_out_of_stock_products(product_t *root)
 		display_out_of_stock_products(root->left);
 		if (root->quantity <= 0)
 		{
-			printf("Product ID: %d\n", root->id);
-			printf("Product Name: %s\n", root->name);
-			printf("Product Price: %d\n", root->price);
-			printf("Product Quantity: %d\n", root->quantity);
+			print_product(root);
 		}
 		display_out_of_stock_products(root->right);
 	}
+}
+
+void print_product(product_t *product)
+{
+	printf("Product ID: %d\n", product->id);
+	printf("Product Name: %s\n", product->name);
+	printf("Product Price: %d\n", product->price);
+	printf("Product Quantity: %d\n\n", product->quantity);
 }
