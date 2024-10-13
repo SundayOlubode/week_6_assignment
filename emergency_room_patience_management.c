@@ -1,35 +1,3 @@
-// Assessment Goals:
-
-// Implement heaps (max-heap)
-// Traverse the heap
-// Heapify the heap
-
-// Tasks:
-
-// Store patients in a max-heap based on the severity of their condition.
-// Extract the patient with the highest severity for treatment.
-// Update the severity as conditions change.
-// Display the current queue of patients waiting for treatment.
-
-// The program uses max-heap to store patients' details
-// (name and severity at the scale of 0 to 10, whereby 0 is the minimum and 10 as the maximum).
-// The program organizes patient's information in a maximum heap.
-// The program allows to take the next patient from the heap (with highest severity).
-// The next highest severity patient will be the root of the maximum heap.
-// The submission contains the option that allows to update patients severity and every time the severity is updated, the maximum heap will be heapfyied.
-// The program will equally be presenting the queue for patients in the order of how they are supposed to be attended.
-
-// The program will be using the following functions:
-// insert_patient - to insert a new patient into the heap
-// update_patient_severity - to update the severity of a patient
-// display_queue - display the current queue of patients waiting for treatment
-// extract_patient - extract the patient with the highest severity for treatment
-// heapify - to heapify the heap
-// swap - to swap two elements in the heap
-// left_child - to get the left child of a node
-// right_child - to get the right child of a node
-// parent - to get the parent of a node
-
 #include <stdio.h>
 #include <string.h>
 
@@ -187,9 +155,25 @@ void update_patient_severity(const char *name, int severity)
 
 void display_queue()
 {
+        node_t temp_heap[100];
+        memcpy(temp_heap, heap, heap_size * sizeof(node_t));
+
+        for (int i = 0; i < heap_size - 1; i++)
+        {
+                for (int j = 0; j < heap_size - i - 1; j++)
+                {
+                        if (temp_heap[j].severity < temp_heap[j + 1].severity)
+                        {
+                                node_t temp = temp_heap[j];
+                                temp_heap[j] = temp_heap[j + 1];
+                                temp_heap[j + 1] = temp;
+                        }
+                }
+        }
+
         for (int i = 0; i < heap_size; i++)
         {
-                printf("%s - %d\n", heap[i].name, heap[i].severity);
+                printf("%s - %d\n", temp_heap[i].name, temp_heap[i].severity);
         }
 }
 
